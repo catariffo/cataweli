@@ -1,54 +1,38 @@
 <?php
-// Database configuration
-// IMPORTANT: Change these values to match your own database setup
 $host = 'localhost';
 $dbname = 'users';
 $username = 'root';
 $password = '';
 
-// Initialize message variable
 $message = '';
 
-// Check if the form was submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
-    // 1. Connect to the database
     $conn = new mysqli($host, $username, $password, $dbname);
 
-    // Check connection
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
 
-    // 2. Collect and sanitize input
-    // We use $_POST['field_name'] to get data from the form
     $name = $_POST['name'];
     $password = $_POST['password'];
 
-    // 3. Prepare the SQL statement
-    // Using prepared statements is CRITICAL for security to prevent SQL Injection
-    // The '?' are placeholders for the actual values
     $stmt = $conn->prepare("INSERT INTO usernames (name, password) VALUES (?, ?)");
 
     if ($stmt) {
-        // 4. Bind parameters
-        // 'ss' means both parameters are Strings (s)
         $stmt->bind_param("ss", $name, $password);
 
-        // 5. Execute the query
         if ($stmt->execute()) {
             $message = "<div style='color: green;'>New name created successfully!</div>";
         } else {
             $message = "<div style='color: red;'>Error: " . $stmt->error . "</div>";
         }
 
-        // Close statement
         $stmt->close();
     } else {
         $message = "<div style='color: red;'>Error preparing statement: " . $conn->error . "</div>";
     }
 
-    // Close connection
     $conn->close();
 }
 ?>
