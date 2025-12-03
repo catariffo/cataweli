@@ -1,7 +1,7 @@
 <?php
 $host = 'localhost';
 $dbname = 'users';
-$username = 'root';
+$username = 'usuario';
 $password = '';
 
 $message = '';
